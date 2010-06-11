@@ -21,14 +21,13 @@ Why?
 
 	Europa's aim will be to produce a high performance IoVM, while
 	retaining as much of the core functionality of Io as humanly possible.
-	Some things, like transformations, of { } and [ ] may be discarded.
+	Some things, like transformations of { } and [ ] may be discarded.
 
 Requirements
 
-	To run Europa, you will need the libtask library. In addition to that
-	requirement, to build Europa, a C99 compiler is required (tested with
-	gcc 4.2.1 and clang 1.1) that supports Apple's blocks syntax, as well
-	as CMake 2.8 or higher.
+	To build Europa, a C99 compiler is required (tested with gcc 4.2.1
+	and clang 1.1) that support Apple's blocks syntax, as well as CMake
+	2.8 or higher.
 
 License
 

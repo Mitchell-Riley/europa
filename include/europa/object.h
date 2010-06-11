@@ -21,24 +21,40 @@
 #include <europa/list.h>
 #include <europa/trie.h>
 
-#define EUROPA_OBJ_HEADER		\
-	dispatch_queue_t queue;		\
-	trie_t* blackboards;		\
-	actor_react_f react;		\
-	list_t* protos;			\
-	char* types;			\
-	trie_t* slots;			\
-	unsigned int done_lookup:1;	\
-	unsigned int activatable:1;	\
-	unsigned int marked:1;
-
+/**
+ * Objects are modelled on the concept of actors, and are the same
+ * structure for all objects. As a result, the only method of
+ * communicating with an object is through messages. However, actors
+ * create blackboards, and ask their intended receiver to subscribe
+ * to it, and fire the message off.
+ */
 typedef struct obj_s
 {
+	/* Messages are queued up in this queue and acted on according
+	   to the custom "react" function, or the default. */
 	dispatch_queue_t queue;
-	trie_t* blackboards;
-	actor_react_f react;
 
-	EUROPA_OBJ_HEADER;
+	/* Stores key->value pairs for any blackboards we push
+	   messages onto. */
+	trie_t* blackboards;
+
+	/* List of obj_t* types which act as parents in the inheritance
+	   tree. */
+	list_t* protos;
+
+	/* Reserved for the future. */
+	char* types;
+
+	/* Key->value pairs representing our slot table. */
+	trie_t* slots;
+
+	/* Set if we have already looked at this object when working
+	   through the inheritance graph. */
+	unsigned int done_lookup:1;
+
+	/* Set if the object will implicitly call its activate function
+	   when looked up. */
+	unsigned int activatable:1;
 } obj_t;
 
 #endif /* !__EUROPA__OBJECT_H__ */
