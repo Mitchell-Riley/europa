@@ -1,0 +1,40 @@
+Europa Programming Language
+Copyright (C) 2010 Jeremy Tregunna
+All Rights Reserved.
+
+Overview
+
+	Europa is an implementation of the Io programming language. It is a
+	pure object-oriented language based off of prototypes instead of
+	classes. It also provides first class concurrency, via actors,
+	and provides some form of garbage collection not yet decided upon.
+
+Why?
+
+	Because Steve Dekorte's VM (herein, the "mainline") needs a lot of
+	work. It's also grown into a large and complex system in recent years,
+	with over 75 addons to contend with, tens of thousands of lines of
+	code... To make large changes requires a lot of attention to detail.
+
+	So rather than contend with the above for exploritory work, a new
+	VM can be written specifically for this purpose.
+
+	Europa's aim will be to produce a high performance IoVM, while
+	retaining as much of the core functionality of Io as humanly possible.
+	Some things, like transformations, of { } and [ ] may be discarded.
+
+Requirements
+
+	To run Europa, you will need the libtask library. In addition to that
+	requirement, to build Europa, a C99 compiler is required (tested with
+	gcc 4.2.1 and clang 1.1) that supports Apple's blocks syntax, as well
+	as CMake 2.8 or higher.
+
+License
+
+	Unless otherwise noted, Europa is released under the terms and
+	conditions of the MIT license which may be found in the licenses/MIT.txt
+	file.
+
+	Contributions to Europa's core will need to be placed in kind.
+

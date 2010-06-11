@@ -1,0 +1,56 @@
+Components required for an IoVM
+
+1. Concurrency primitives -- Derived from work on ActorCore but separate
+2. Basic data structures, list, trie. -- Done.
+3. Object model (not necessarily identical to Io) -- See below for our interpretation.
+4. Message implementation -- See below for our interpretation.
+5. Runtime hintable type system (even if unhooked for now).
+6. Base object type.
+
+--------
+
+Object model
+
+Objects are composed of the following items:
+
+	* Pointer to list of parents
+	* Pointer to type information
+	* Pointer to slot table
+	* Bitfield (32-bit)
+		1. Set if we've looked up this object.
+		2. Set if this object is activatable.
+
+The above is the object header to which all objects will support. Objects are modelled in
+C structures, and shall include this header to be compatible with this object model.
+
+--------
+
+Message implementation
+
+Messages are inherited from ActorCore, but we encode the following information on them:
+
+	* Type Information (not used right away)
+	* Pointer to a list of arguments
+	* Pointer to the next message
+	* Pointer to a cached object
+	* Line number
+	* Label
+
+We also know about our message name, but it is outside of the above -- in the msg_t struct
+itself.
+
+--------
+
+Type system
+
+Types are composed of the following items:
+
+	* Unique identifier
+	* Pointer to our state
+
+Still more to figure out here, specifically as it relates to signatures.
+
+--------
+
+Base type -- Object
+
