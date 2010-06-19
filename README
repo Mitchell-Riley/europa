@@ -6,8 +6,7 @@ Overview
 
 	Europa is an implementation of the Io programming language. It is a
 	pure object-oriented language based off of prototypes instead of
-	classes. It also provides first class concurrency, via actors,
-	and provides some form of garbage collection not yet decided upon.
+	classes. This is just a stub.
 
 Why?
 
@@ -25,9 +24,8 @@ Why?
 
 Requirements
 
-	To build Europa, a C99 compiler is required (tested with gcc 4.2.1
-	and clang 1.1) that support Apple's blocks syntax, as well as CMake
-	2.8 or higher.
+	To build Europa, we use Go. It's being developed with Google Go 6g,
+	though it very likely works with other Go compilers.
 
 License
 
