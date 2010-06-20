@@ -32,15 +32,22 @@ type Message struct {
 type IMessage interface {
 	IObject
 
+	GetName() string
 	SetName(string)
 	SetArguments([]*Message)
 	SetNext(*Message)
+
+	PerformOn(IObject, IObject) IObject
 }
 
 func (msg *Message) Clone() IObject {
 	r := new(Message)
 	r.proto = msg
 	return r
+}
+
+func (msg *Message) GetName() string {
+	return msg.name
 }
 
 func (msg *Message) SetName(str string) {
@@ -53,4 +60,20 @@ func (msg *Message) SetArguments(args []*Message) {
 
 func (msg *Message) SetNext(next *Message) {
 	msg.next = next
+}
+
+func (msg *Message) PerformOn(locals IObject, target IObject) IObject {
+	var cached = target
+	var m = msg
+	var result IObject
+
+	for ; m.next != nil; m = m.next {
+		if m.name == ";" {
+			target = cached;
+		} else {
+			result = target.Perform(locals, m)
+		}
+	}
+
+	return result;
 }
