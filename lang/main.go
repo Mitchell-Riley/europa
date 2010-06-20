@@ -10,36 +10,11 @@
  * be found in the LICENSE.MIT file included in this distribution.
  *******************************************************************
  * Project: Europa Programming Language
- * File: object.go
- * Description: Defines the base object type.
+ * File: 
+ * Description: 
  ******************************************************************/
 
 package main
 
-type Object struct {
-	/* Our parent. */
-	proto IObject
-
-	/* Slot table. Simple string->object mapping. */
-	slots map[string] IObject
-}
-
-type IObject interface {
-	Clone() IObject
-	SetSlot(string, IObject)
-	GetSlot(string) IObject
-}
-
-func (obj *Object) Clone() IObject {
-	r := new(Object)
-	r.proto = obj.proto
-	return r
-}
-
-func (obj *Object) SetSlot(key string, value IObject) {
-	obj.slots[key] = value
-}
-
-func (obj *Object) GetSlot(key string) IObject {
-	return obj.slots[key]
+func main() {
 }

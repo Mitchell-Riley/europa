@@ -14,7 +14,7 @@
  * Description: Messages
  ******************************************************************/
 
-package europa
+package main
 
 type Message struct {
 	*Object
