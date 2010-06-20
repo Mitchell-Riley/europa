@@ -14,7 +14,7 @@
  * Description: Defines the base object type.
  ******************************************************************/
 
-package main
+package europa
 
 type Object struct {
 	/* Our parent. */

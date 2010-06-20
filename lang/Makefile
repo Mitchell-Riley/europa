@@ -2,17 +2,18 @@ NAME := europa
 GOC := 6g
 GOL := 6l
 RM := rm -f
-SRCS := $(wildcard *.go)
+SRCS := object.go msg.go number.go
 
 .SUFFIXES: .go .6
 
 all: $(NAME)
 
-$(NAME): build
-	$(GOL) -o $(NAME) $(NAME).6
+$(NAME): build_pkg
+	$(GOC) main.go
+	$(GOL) -o $(NAME) main.6
 
-build: $(SRCS)
+build_pkg: $(SRCS)
 	$(GOC) -o $(NAME).6 $(SRCS)
 
 clean:
-	$(RM) $(NAME).6 $(NAME)
+	$(RM) main.6 $(NAME).6 $(NAME)
