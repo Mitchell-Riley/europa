@@ -77,3 +77,7 @@ func (msg *Message) PerformOn(locals IObject, target IObject) IObject {
 
 	return result;
 }
+
+func (msg *Message) Activate(target IObject, locals IObject, m IMessage, ctx IObject) IObject {
+	return msg.PerformOn(locals, locals)
+}
