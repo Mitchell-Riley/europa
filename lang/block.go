@@ -57,7 +57,7 @@ func (blk *Block) Activate(target IObject, locals IObject, m IMessage, ctx IObje
 	/*blockLocals.SetSlot("updateSlot", someIBlock)*/
 
 	for i, name := range blk.argNames {
-		arg := m.ArgAt(locals, i)
+		arg := m.EvalArgAt(locals, i)
 		blockLocals.SetSlot(name, arg)
 	}
 

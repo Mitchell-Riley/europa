@@ -45,13 +45,11 @@ func (num *Number) SetValue(val float64) {
 }
 
 func (num *Number) Add(self INumber, locals IObject, msg IMessage) INumber {
-	other := msg.ArgAt(locals, 0)
-	var onum INumber = other.(INumber)
-	return NewNumber(self.GetValue() + onum.GetValue())
+	other := msg.NumberArgAt(locals, 0)
+	return NewNumber(self.GetValue() + other.GetValue())
 }
 
 func (num *Number) Sub(self INumber, locals IObject, msg IMessage) INumber {
-	other := msg.ArgAt(locals, 0)
-	var onum INumber = other.(INumber)
-	return NewNumber(self.GetValue() - onum.GetValue())
+	other := msg.NumberArgAt(locals, 0)
+	return NewNumber(self.GetValue() - other.GetValue())
 }

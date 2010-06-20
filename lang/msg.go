@@ -38,7 +38,8 @@ type IMessage interface {
 	SetArguments([]*Message)
 	SetNext(*Message)
 
-	ArgAt(IObject, int) IObject
+	EvalArgAt(IObject, int) IObject
+	NumberArgAt(IObject, int) INumber
 	DoInContext(IObject, IMessage) IObject
 	PerformOn(IObject, IObject) IObject
 }
@@ -69,7 +70,7 @@ func (msg *Message) SetNext(next *Message) {
 	msg.next = next
 }
 
-func (msg *Message) ArgAt(locals IObject, n int) IObject {
+func (msg *Message) EvalArgAt(locals IObject, n int) IObject {
 	m := msg.args[n]
 
 	if m != nil {
@@ -79,10 +80,16 @@ func (msg *Message) ArgAt(locals IObject, n int) IObject {
 	return nil
 }
 
+func (msg *Message) NumberArgAt(locals IObject, n int) INumber {
+	tmp := msg.EvalArgAt(locals, n)
+	var result INumber = tmp.(INumber)
+	return result
+}
+
 func (msg *Message) DoInContext(locals IObject, m IMessage) IObject {
-	ctx := m.ArgAt(locals, 0)
+	ctx := m.EvalArgAt(locals, 0)
 	if len(m.GetArguments()) >= 2 {
-		locals = m.ArgAt(locals, 1)
+		locals = m.EvalArgAt(locals, 1)
 	} else {
 		locals = ctx
 	}
