@@ -26,8 +26,8 @@ type INumber interface {
 
 	GetValue() float64
 	SetValue(float64)
-	Add(INumber) INumber
-	Sub(INumber) INumber
+	Add(INumber, IObject, IMessage) INumber
+	Sub(INumber, IObject, IMessage) INumber
 }
 
 func NewNumber(num float64) INumber {
@@ -44,10 +44,14 @@ func (num *Number) SetValue(val float64) {
 	num.value = val
 }
 
-func (num *Number) Add(other INumber) INumber {
-	return NewNumber(num.value + other.GetValue())
+func (num *Number) Add(self INumber, locals IObject, msg IMessage) INumber {
+	other := msg.ArgAt(locals, 0)
+	var onum INumber = other.(INumber)
+	return NewNumber(self.GetValue() + onum.GetValue())
 }
 
-func (num *Number) Sub(other INumber) INumber {
-	return NewNumber(num.value - other.GetValue())
+func (num *Number) Sub(self INumber, locals IObject, msg IMessage) INumber {
+	other := msg.ArgAt(locals, 0)
+	var onum INumber = other.(INumber)
+	return NewNumber(self.GetValue() - onum.GetValue())
 }
