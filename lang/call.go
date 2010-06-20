@@ -10,17 +10,31 @@
  * be found in the LICENSE.MIT file included in this distribution.
  *******************************************************************
  * Project: Europa Programming Language
- * File: 
- * Description: 
+ * File: call.go
+ * Description: Contains information about method calls
  ******************************************************************/
 
-package main
+package europa
 
-/*
-import (
-	"./europa"
-)
-*/
+type Call struct {
+	*Object
+	sender IObject
+	message IMessage
+	target IObject
+	context IObject
+	activated IBlock
+}
 
-func main() {
+type ICall interface {
+	IObject
+}
+
+func NewCall(sender IObject, target IObject, msg IMessage, context IObject, activated IBlock) ICall {
+	c := new(Call)
+	c.sender = sender
+	c.target = target
+	c.message = msg
+	c.context = context
+	c.activated = activated
+	return c
 }
