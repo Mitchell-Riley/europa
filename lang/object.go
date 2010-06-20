@@ -108,6 +108,11 @@ func (obj *Object) Forward(locals IObject, msg IMessage) IObject {
 }
 
 func (obj *Object) Activate(target IObject, locals IObject, msg IMessage, ctx IObject) IObject {
-	// TODO: Check if the object is activatable, and if so...call it's activate function, otherwise return obj.
+	if obj.activatable {
+		v, context := obj.GetSlot("activate")
+		if v != nil && context != nil {
+			return v.Activate(target, locals, msg, context)
+		}
+	}
 	return obj
 }
