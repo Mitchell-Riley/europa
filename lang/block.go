@@ -18,6 +18,7 @@ package europa
 
 type Block struct {
 	*Object
+	cfunc (func(IObject, IObject, IMessage) IObject)
 	message Message
 	argNames []string
 	scope IObject
@@ -38,6 +39,10 @@ func (blk *Block) Clone() IObject {
 }
 
 func (blk *Block) Activate(target IObject, locals IObject, m IMessage, ctx IObject) IObject {
+	if blk.cfunc != nil {
+		return blk.cfunc(target, locals, m)
+	}
+
 	scope := blk.scope
 	blockLocals := ctx.Clone()
 
@@ -49,14 +54,12 @@ func (blk *Block) Activate(target IObject, locals IObject, m IMessage, ctx IObje
 
 	blockLocals.SetSlot("call", callObject)
 	blockLocals.SetSlot("self", scope)
-	/*blockLocals.SetSlot("updateSlot", someIBlock*/
+	/*blockLocals.SetSlot("updateSlot", someIBlock)*/
 
 	for i, name := range blk.argNames {
 		arg := m.ArgAt(locals, i)
 		blockLocals.SetSlot(name, arg)
 	}
 
-	result := blk.message.PerformOn(blockLocals, blockLocals)
-
-	return result
+	return blk.message.PerformOn(blockLocals, blockLocals)
 }
