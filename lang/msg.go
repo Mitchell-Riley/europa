@@ -34,8 +34,11 @@ type IMessage interface {
 
 	GetName() string
 	SetName(string)
+	GetArguments() []*Message
 	SetArguments([]*Message)
 	SetNext(*Message)
+
+	ArgAt(IObject, int) IObject
 
 	PerformOn(IObject, IObject) IObject
 }
@@ -54,12 +57,37 @@ func (msg *Message) SetName(str string) {
 	msg.name = str
 }
 
+func (msg *Message) GetArguments() []*Message {
+	return msg.args;
+}
+
 func (msg *Message) SetArguments(args []*Message) {
 	msg.args = args
 }
 
 func (msg *Message) SetNext(next *Message) {
 	msg.next = next
+}
+
+func (msg *Message) ArgAt(locals IObject, n int) IObject {
+	m := msg.args[n]
+
+	if m != nil {
+		return m.PerformOn(locals, locals)
+	}
+
+	return nil
+}
+
+func (msg *Message) DoInContext(locals IObject, m IMessage) IObject {
+	ctx := m.ArgAt(locals, 0)
+	if len(m.GetArguments()) >= 2 {
+		locals = m.ArgAt(locals, 1)
+	} else {
+		locals = ctx
+	}
+
+	return msg.PerformOn(locals, ctx)
 }
 
 func (msg *Message) PerformOn(locals IObject, target IObject) IObject {
