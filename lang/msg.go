@@ -39,7 +39,7 @@ type IMessage interface {
 	SetNext(*Message)
 
 	ArgAt(IObject, int) IObject
-
+	DoInContext(IObject, IMessage) IObject
 	PerformOn(IObject, IObject) IObject
 }
 
