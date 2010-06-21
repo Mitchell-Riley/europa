@@ -28,11 +28,15 @@ type Object struct {
 
 	/* Are we activatable? */
 	activatable bool
+
+	/* What about if we've scanned this object already in lookup? */
+	scanned bool
 }
 
 type IObject interface {
 	Clone() IObject
 	SetSlot(string, IObject)
+	SetProto(IObject)
 	SetLocals(bool)
 	GetActivatable() bool
 	SetActivatable(bool)
@@ -40,6 +44,15 @@ type IObject interface {
 	Perform(IObject, IMessage) IObject
 	Forward(IObject, IMessage) IObject
 	Activate(IObject, IObject, IMessage, IObject) IObject
+}
+
+func NewObject(proto IObject, locals bool, activatable bool, scanned bool) IObject {
+	r := new(Object)
+	r.proto = proto
+	r.locals = locals
+	r.activatable = activatable
+	r.scanned = scanned
+	return r
 }
 
 func (obj *Object) Clone() IObject {
@@ -53,8 +66,12 @@ func (obj *Object) SetSlot(key string, value IObject) {
 	obj.slots[key] = value
 }
 
+func (obj *Object) SetProto(proto IObject) {
+	obj.proto = proto
+}
+
 func (obj *Object) SetLocals(val bool) {
-	obj.locals = val;
+	obj.locals = val
 }
 
 func (obj *Object) GetActivatable() bool {
@@ -69,6 +86,8 @@ func (obj *Object) SetActivatable(val bool) {
 func (obj *Object) GetSlot(key string) (v IObject, ctx IObject) {
 	var ok bool
 
+	obj.scanned = true
+
 	if v, ok = obj.slots[key]; ok {
 		ctx = obj
 		return v, ctx
@@ -78,7 +97,11 @@ func (obj *Object) GetSlot(key string) (v IObject, ctx IObject) {
 		return nil, nil
 	}
 
-	return obj.proto.GetSlot(key)
+	result, context := obj.proto.GetSlot(key)
+
+	obj.scanned = false
+
+	return result, context
 }
 
 func (obj *Object) Perform(locals IObject, msg IMessage) IObject {

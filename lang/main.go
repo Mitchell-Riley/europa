@@ -16,11 +16,15 @@
 
 package main
 
-/*
 import (
 	"./europa"
 )
-*/
 
 func main() {
+	println("Creating the lobby...")
+	lobby := europa.NewObject(nil, false, false, false)
+	println("Creating Object from the lobby...")
+	object := europa.NewObject(lobby, false, false, false)
+	println("Linking Lobby to Object...")
+	lobby.SetProto(object)
 }
