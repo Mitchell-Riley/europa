@@ -18,7 +18,6 @@ package europa
 
 type State struct {
 	lobby IObject
-	protos map[string] *IObject
 }
 
 type IState interface {
@@ -38,6 +37,3 @@ func (state *State) InitializeState() {
 	state.lobby.SetSlot("Object", object)
 }
 
-func (state *State) AddProto(name string, proto *IObject) {
-	state.protos[name] = proto
-}
