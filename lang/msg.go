@@ -81,9 +81,7 @@ func (msg *Message) EvalArgAt(locals IObject, n int) IObject {
 }
 
 func (msg *Message) NumberArgAt(locals IObject, n int) INumber {
-	tmp := msg.EvalArgAt(locals, n)
-	var result INumber = tmp.(INumber)
-	return result
+	return msg.EvalArgAt(locals, n).(INumber)
 }
 
 func (msg *Message) DoInContext(locals IObject, m IMessage) IObject {
