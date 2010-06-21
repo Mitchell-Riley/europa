@@ -17,6 +17,9 @@
 package europa
 
 type Object struct {
+	/* VM State */
+	state *IState
+
 	/* Our parent. */
 	proto IObject
 
@@ -46,8 +49,10 @@ type IObject interface {
 	Activate(IObject, IObject, IMessage, IObject) IObject
 }
 
-func NewObject(proto IObject, locals bool, activatable bool, scanned bool) IObject {
+func NewObject(state IState, proto IObject, locals bool, activatable bool, scanned bool) IObject {
 	r := new(Object)
+	r.state = &state
+	r.slots = make(map[string]IObject, 8)
 	r.proto = proto
 	r.locals = locals
 	r.activatable = activatable
@@ -58,6 +63,7 @@ func NewObject(proto IObject, locals bool, activatable bool, scanned bool) IObje
 func (obj *Object) Clone() IObject {
 	r := new(Object)
 	r.proto = obj.proto
+	r.slots = make(map[string]IObject, 8)
 	r.locals = false
 	return r
 }

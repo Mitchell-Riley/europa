@@ -2,7 +2,7 @@ NAME := europa
 GOC := 6g
 GOL := 6l
 RM := rm -f
-SRCS := object.go msg.go call.go block.go number.go
+SRCS := object.go msg.go state.go call.go block.go number.go
 
 .SUFFIXES: .go .6
 

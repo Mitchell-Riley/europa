@@ -59,7 +59,7 @@ func (msg *Message) SetName(str string) {
 }
 
 func (msg *Message) GetArguments() []*Message {
-	return msg.args;
+	return msg.args
 }
 
 func (msg *Message) SetArguments(args []*Message) {
@@ -102,13 +102,13 @@ func (msg *Message) PerformOn(locals IObject, target IObject) IObject {
 
 	for ; m.next != nil; m = m.next {
 		if m.name == ";" {
-			target = cached;
+			target = cached
 		} else {
 			result = target.Perform(locals, m)
 		}
 	}
 
-	return result;
+	return result
 }
 
 func (msg *Message) Activate(target IObject, locals IObject, m IMessage, ctx IObject) IObject {
