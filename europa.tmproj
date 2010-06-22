@@ -2,45 +2,210 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>currentDocument</key>
+	<string>lang/parser.go</string>
 	<key>documents</key>
 	<array>
 		<dict>
 			<key>filename</key>
 			<string>lang/block.go</string>
+			<key>lastUsed</key>
+			<date>2010-06-22T16:59:30Z</date>
 		</dict>
 		<dict>
 			<key>filename</key>
 			<string>lang/call.go</string>
+			<key>lastUsed</key>
+			<date>2010-06-22T16:59:31Z</date>
 		</dict>
 		<dict>
 			<key>filename</key>
 			<string>lang/main.go</string>
+			<key>lastUsed</key>
+			<date>2010-06-22T16:59:32Z</date>
 		</dict>
 		<dict>
 			<key>filename</key>
 			<string>lang/Makefile</string>
+			<key>lastUsed</key>
+			<date>2010-06-22T16:59:33Z</date>
 		</dict>
 		<dict>
 			<key>filename</key>
 			<string>lang/msg.go</string>
+			<key>lastUsed</key>
+			<date>2010-06-22T16:59:34Z</date>
 		</dict>
 		<dict>
 			<key>filename</key>
 			<string>lang/number.go</string>
+			<key>lastUsed</key>
+			<date>2010-06-22T16:59:34Z</date>
 		</dict>
 		<dict>
 			<key>filename</key>
 			<string>lang/object.go</string>
+			<key>lastUsed</key>
+			<date>2010-06-22T16:59:35Z</date>
 		</dict>
 		<dict>
 			<key>filename</key>
 			<string>lang/state.go</string>
+			<key>lastUsed</key>
+			<date>2010-06-22T16:59:36Z</date>
+		</dict>
+		<dict>
+			<key>filename</key>
+			<string>lang/parser.go</string>
+			<key>lastUsed</key>
+			<date>2010-06-22T16:59:36Z</date>
+			<key>selected</key>
+			<true/>
 		</dict>
 	</array>
 	<key>fileHierarchyDrawerWidth</key>
 	<integer>200</integer>
 	<key>metaData</key>
-	<dict/>
+	<dict>
+		<key>lang/Makefile</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>0</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
+		</dict>
+		<key>lang/block.go</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>0</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
+		</dict>
+		<key>lang/call.go</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>0</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
+		</dict>
+		<key>lang/main.go</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>0</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
+		</dict>
+		<key>lang/msg.go</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>0</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
+		</dict>
+		<key>lang/number.go</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>0</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
+		</dict>
+		<key>lang/object.go</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>54</integer>
+				<key>line</key>
+				<integer>68</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>53</integer>
+		</dict>
+		<key>lang/parser.go</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>24</integer>
+				<key>line</key>
+				<integer>173</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>157</integer>
+		</dict>
+		<key>lang/state.go</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>0</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
+		</dict>
+	</dict>
+	<key>openDocuments</key>
+	<array>
+		<string>lang/block.go</string>
+		<string>lang/call.go</string>
+		<string>lang/main.go</string>
+		<string>lang/Makefile</string>
+		<string>lang/msg.go</string>
+		<string>lang/number.go</string>
+		<string>lang/object.go</string>
+		<string>lang/state.go</string>
+		<string>lang/parser.go</string>
+	</array>
 	<key>showFileHierarchyDrawer</key>
 	<true/>
 	<key>windowFrame</key>

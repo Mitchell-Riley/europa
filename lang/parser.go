@@ -167,11 +167,11 @@ func (lex *Lexer) ParseExpression() vector.Vector {
 					tree.Push(NewToken(strings.NewReader("")))
 				}
 				
-				if len(tree.At(-1).(IToken).GetArguments()) > 0 {
+				if len(tree.Last().(IToken).GetArguments()) > 0 {
 					tree.Push(NewToken(strings.NewReader("")))
 				}
 				
-				tree.At(-1).(IToken).SetArguments(args)
+				tree.Last().(IToken).SetArguments(args)
 				lex.Consume()
 			} else {
 				println("Syntax Error: ')' expected")
