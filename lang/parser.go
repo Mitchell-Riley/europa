@@ -24,9 +24,9 @@ import (
 )
 
 type Lexer struct {
-	input *strings.Reader
-	current *strings.Reader
-	next *strings.Reader
+	input string
+	current string
+	next string
 }
 type ILexer interface {
 	Consume()
@@ -39,11 +39,33 @@ type ILexer interface {
 	ParseExpression() vector.Vector
 }
 
-func NewLexer(str *strings.Reader) *Lexer {
+func isAlnum(text string) bool {
+	for i, c := range text {
+		if i % 1 == 0 && !unicode.IsLetter(c) {
+			return false
+		} else {
+			if !(unicode.IsLetter(c) || unicode.IsDigit(c)) {
+				return false
+			}
+		}
+	}
+	return true
+}
+
+func isDigit(text string) bool {
+	for _, c := range text {
+		if !unicode.IsDigit(c) {
+			return false
+		}
+	}
+	return true
+}
+
+func NewLexer(str string) *Lexer {
 	r := new(Lexer)
 	r.input = str
-	r.current = strings.NewReader("")
-	r.next = strings.NewReader("")
+	r.current = ""
+	r.next = ""
 	r.Consume()
 	r.Consume()
 	return r
@@ -52,30 +74,24 @@ func (lex *Lexer) Consume() {
 	lex.current = lex.next
 	lex.Lex()
 }
-func (lex *Lexer) CurrentRune() int {
-	r, _, _ := lex.input.ReadRune()
-	return r
+func (lex *Lexer) CurrentChar() byte {
+	return lex.input[0]
 }
-func (lex *Lexer) NextRune() {
-	tmp := (*lex.input)[1:]
-	lex.input = &tmp
+func (lex *Lexer) NextChar() {
+	lex.input = lex.input[1:]
 }
 func (lex *Lexer) ParseIdent() {
-	r, size, _ := lex.input.ReadRune()
-	var i int
-	for i = 0; i < len(*lex.input) && unicode.IsLetter(r); i += size {}
-	tmp := (*lex.input)[0:i]
-	lex.next = &tmp
-	tmp = (*lex.input)[i:]
-	lex.input = &tmp
+	s := strings.Split(lex.input, " ", 1)[0]
+	if isAlnum(s) {
+		lex.next = lex.input[0:len(s)]
+		lex.input = lex.input[len(s):]
+	}
 }
 func (lex *Lexer) ParseNumber() {
-	for i, r := range *lex.input {
-		if !unicode.IsDigit(r) { break }
-		tmp := (*lex.input)[0:i]
-		lex.next = &tmp
-		tmp = (*lex.input)[i:]
-		lex.input = &tmp
+	s := strings.Split(lex.input, " ", 1)[0]
+	if isDigit(s) {
+		lex.next = lex.input[0:len(s)]
+		lex.input = lex.input[len(s):]
 	}
 }
 func (lex *Lexer) ParseArguments() vector.Vector {
@@ -83,14 +99,12 @@ func (lex *Lexer) ParseArguments() vector.Vector {
 		args vector.Vector
 		arg vector.Vector
 	)
-	lparenRune := strings.NewReader("(")
-	commaRune := strings.NewReader(",")
-	for lex.current != nil {
-		if lex.current == lparenRune {
+	for lex.current != "" {
+		if lex.current == "(" {
 			if len(arg) > 0 {
 				args.Push(arg)
 			}
-		} else if lex.current == commaRune {
+		} else if lex.current == "," {
 			args.Push(arg)
 			arg = make(vector.Vector, 0)
 			lex.Consume()
@@ -103,18 +117,15 @@ func (lex *Lexer) ParseArguments() vector.Vector {
 }
 func (lex *Lexer) ParseExpression() vector.Vector {
 	var tree vector.Vector
-	commaRune := strings.NewReader(",")
-	lparenRune := strings.NewReader("(")
-	rparenRune := strings.NewReader(")")
-	for lex.current != nil {
-		if lex.current == commaRune {
+	for lex.current != "" {
+		if lex.current == "," {
 			break
-		} else if lex.current == rparenRune {
+		} else if lex.current == ")" {
 			break
-		} else if lex.current == lparenRune {
+		} else if lex.current == "(" {
 			lex.Consume()
 			args := lex.ParseArguments()
-			if lex.current == rparenRune {
+			if lex.current == ")" {
 				if len(tree) == 0 {
 					tree.Push(NewMessage("", new(vector.Vector)))
 				}
@@ -129,32 +140,34 @@ func (lex *Lexer) ParseExpression() vector.Vector {
 				println("Syntax Error: ')' expected")
 			}
 		} else {
-			// XXX: Don't know if the cast works as expected
-			tree.Push(NewMessage((string)(*lex.current), new(vector.Vector)))
+			tree.Push(NewMessage(lex.current, new(vector.Vector)))
 		}
 	}
 	
 	return tree
 }
 func (lex *Lexer) Lex() {
-	newlineRune, _, _ := strings.NewReader("\n").ReadRune()
-	spaceRune, _, _ := strings.NewReader(" ").ReadRune()
-	
-	if lex.input == strings.NewReader("") {
-		lex.next = nil
-	} else if lex.CurrentRune() == newlineRune {
-		lex.next = strings.NewReader(";")
-		lex.NextRune()
-	} else if lex.CurrentRune() == spaceRune {
-		lex.NextRune()
+	if lex.input == "" {
+		lex.next = ""
+	} else if lex.CurrentChar() == '\n' {
+		lex.next = ";"
+		lex.NextChar()
+	} else if lex.CurrentChar() == ' ' {
+		lex.NextChar()
 		lex.Lex()
-	} else if unicode.IsLetter(lex.CurrentRune()) {
+	} else if isAlnum(string(lex.CurrentChar())) {
 		lex.ParseIdent()
-	} else if unicode.IsDigit(lex.CurrentRune()) {
+	} else if isDigit(string(lex.CurrentChar())) {
 		lex.ParseNumber()
 	} else {
-		tmp, _ := lex.input.ReadByte()
-		lex.next = strings.NewReader(string(tmp))
-		lex.NextRune()
+		lex.next = string(lex.CurrentChar())
+		lex.NextChar()
+	}
+}
+
+func Parse(str string) {
+	lex := NewLexer(str)
+	for _, e := range lex.ParseExpression() {
+		println(e)
 	}
 }
