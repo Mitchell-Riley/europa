@@ -15,29 +15,12 @@
  *              go-parsec library.
  ******************************************************************/
 
-package parser
+package europa
 
 import (
 	"strings"
 	"unicode"
 	"container/vector"
-	//"./europa"
-)
-
-type TokenType int
-
-const (
-	TK_NONE = iota
-	TK_LPAREN
-	TK_COMMA
-	TK_RPAREN
-	TK_DQUOTE
-	TK_TQUOTE
-	TK_IDENT
-	TK_TERM
-	TK_COMMENT
-	TK_NUMBER
-	TK_HEX
 )
 
 type Lexer struct {
@@ -54,37 +37,6 @@ type ILexer interface {
 	ParseNumber()
 	ParseArguments() vector.Vector
 	ParseExpression() vector.Vector
-}
-
-type Token struct {
-	name *strings.Reader
-	arguments vector.Vector
-}
-type IToken interface {
-	SetName(*strings.Reader)
-	GetName() *strings.Reader
-	SetArguments(vector.Vector)
-	GetArguments() vector.Vector
-	Equal(IToken) bool
-}
-
-func NewToken(name *strings.Reader) *Token {
-	return &Token{name: name}
-}
-func (tok *Token) SetName(name *strings.Reader) {
-	tok.name = name
-}
-func (tok *Token) GetName() *strings.Reader {
-	return tok.name
-}
-func (tok *Token) SetArguments(args vector.Vector) {
-	tok.arguments = args
-}
-func (tok *Token) GetArguments() vector.Vector {
-	return tok.arguments
-}
-func (tok *Token) Equal(token IToken) bool {
-	return tok.name == token.GetName()
 }
 
 func NewLexer(str *strings.Reader) *Lexer {
@@ -164,20 +116,21 @@ func (lex *Lexer) ParseExpression() vector.Vector {
 			args := lex.ParseArguments()
 			if lex.current == rparenRune {
 				if len(tree) == 0 {
-					tree.Push(NewToken(strings.NewReader("")))
+					tree.Push(NewMessage("", new(vector.Vector)))
 				}
 				
-				if len(tree.Last().(IToken).GetArguments()) > 0 {
-					tree.Push(NewToken(strings.NewReader("")))
+				if tree.Last().(IMessage).GetArguments().Len() > 0 {
+					tree.Push(NewMessage("", new(vector.Vector)))
 				}
 				
-				tree.Last().(IToken).SetArguments(args)
+				tree.Last().(IMessage).SetArguments(&args)
 				lex.Consume()
 			} else {
 				println("Syntax Error: ')' expected")
 			}
 		} else {
-			tree.Push(NewToken(lex.current))
+			// XXX: Don't know if the cast works as expected
+			tree.Push(NewMessage((string)(*lex.current), new(vector.Vector)))
 		}
 	}
 	

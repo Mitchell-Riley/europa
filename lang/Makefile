@@ -2,7 +2,7 @@ NAME := europa
 GOC := 6g
 GOL := 6l
 RM := rm -f
-SRCS := object.go msg.go state.go call.go block.go number.go
+SRCS := object.go msg.go state.go call.go block.go number.go parser.go
 
 .SUFFIXES: .go .6
 
@@ -14,7 +14,6 @@ $(NAME): build_pkg
 
 build_pkg: $(SRCS)
 	$(GOC) -o $(NAME).6 $(SRCS)
-	$(GOC) -o parser.6 parser.go
 
 clean:
 	$(RM) main.6 $(NAME).6 $(NAME)

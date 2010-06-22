@@ -16,6 +16,8 @@
 
 package europa
 
+import "container/vector"
+
 type Message struct {
 	*Object
 
@@ -23,7 +25,7 @@ type Message struct {
 	name string
 
 	/* List of arguments */
-	args []*Message
+	args *vector.Vector
 
 	/* Next message in the chain */
 	next *Message
@@ -34,14 +36,22 @@ type IMessage interface {
 
 	GetName() string
 	SetName(string)
-	GetArguments() []*Message
-	SetArguments([]*Message)
+	GetArguments() *vector.Vector
+	SetArguments(*vector.Vector)
 	SetNext(*Message)
 
 	EvalArgAt(IObject, int) IObject
 	NumberArgAt(IObject, int) INumber
 	DoInContext(IObject, IMessage) IObject
 	PerformOn(IObject, IObject) IObject
+}
+
+func NewMessage(name string, args *vector.Vector) *Message {
+	r := new(Message)
+	r.slots = make(map[string]IObject, DEFAULT_SLOTS_SIZE)
+	r.name = name
+	r.args = args
+	return r
 }
 
 func (msg *Message) Clone() IObject {
@@ -58,11 +68,11 @@ func (msg *Message) SetName(str string) {
 	msg.name = str
 }
 
-func (msg *Message) GetArguments() []*Message {
+func (msg *Message) GetArguments() *vector.Vector {
 	return msg.args
 }
 
-func (msg *Message) SetArguments(args []*Message) {
+func (msg *Message) SetArguments(args *vector.Vector) {
 	msg.args = args
 }
 
@@ -71,7 +81,7 @@ func (msg *Message) SetNext(next *Message) {
 }
 
 func (msg *Message) EvalArgAt(locals IObject, n int) IObject {
-	m := msg.args[n]
+	m := msg.args.At(n).(IMessage)
 
 	if m != nil {
 		return m.PerformOn(locals, locals)
@@ -86,7 +96,7 @@ func (msg *Message) NumberArgAt(locals IObject, n int) INumber {
 
 func (msg *Message) DoInContext(locals IObject, m IMessage) IObject {
 	ctx := m.EvalArgAt(locals, 0)
-	if len(m.GetArguments()) >= 2 {
+	if m.GetArguments().Len() >= 2 {
 		locals = m.EvalArgAt(locals, 1)
 	} else {
 		locals = ctx
