@@ -32,7 +32,14 @@ type INumber interface {
 
 func NewNumber(num float64) INumber {
 	r := new(Number)
+	r.slots = make(map[string]IObject, DEFAULT_SLOTS_SIZE)
 	r.value = num
+	return r
+}
+
+func (num *Number) Clone() IObject {
+	r := NewNumber(num.value)
+	r.SetProto(num)
 	return r
 }
 

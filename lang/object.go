@@ -16,6 +16,8 @@
 
 package europa
 
+const DEFAULT_SLOTS_SIZE = 8
+
 type Object struct {
 	/* VM State */
 	state *IState
@@ -52,7 +54,7 @@ type IObject interface {
 func NewObject(state IState, proto IObject, locals bool, activatable bool, scanned bool) IObject {
 	r := new(Object)
 	r.state = &state
-	r.slots = make(map[string]IObject, 8)
+	r.slots = make(map[string]IObject, DEFAULT_SLOTS_SIZE)
 	r.proto = proto
 	r.locals = locals
 	r.activatable = activatable
@@ -103,11 +105,15 @@ func (obj *Object) GetSlot(key string) (v IObject, ctx IObject) {
 		return nil, nil
 	}
 
-	result, context := obj.proto.GetSlot(key)
+	if obj.proto != nil {
+		v, ctx = obj.proto.GetSlot(key)
+	} else {
+		v, ctx = nil, nil
+	}
 
 	obj.scanned = false
 
-	return result, context
+	return v, ctx
 }
 
 func (obj *Object) Perform(locals IObject, msg IMessage) IObject {
