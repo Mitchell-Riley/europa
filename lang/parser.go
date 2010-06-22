@@ -19,6 +19,7 @@ package europa
 
 import (
 	"strings"
+	"strconv"
 	"unicode"
 	"container/vector"
 )
@@ -81,32 +82,40 @@ func (lex *Lexer) NextChar() {
 	lex.input = lex.input[1:]
 }
 func (lex *Lexer) ParseIdent() {
-	s := strings.Split(lex.input, " ", 1)[0]
+	println("*** (ParseIdent)")
+	s := strings.Split(lex.input, " ", 0)[0]
+	println("Got Identifier: " + s)
 	if isAlnum(s) {
+		println("--- lex.next(Before) = " + lex.next)
 		lex.next = lex.input[0:len(s)]
+		println("--- lex.next(After) = " + lex.next)
+		println("--- lex.input(Before) = " + lex.input)
 		lex.input = lex.input[len(s):]
+		println("--- lex.input(After) = " + lex.input)
 	}
 }
 func (lex *Lexer) ParseNumber() {
+	println("*** (ParseNumber)")
 	s := strings.Split(lex.input, " ", 1)[0]
+	println("Got Number: " + s)
 	if isDigit(s) {
 		lex.next = lex.input[0:len(s)]
 		lex.input = lex.input[len(s):]
 	}
 }
-func (lex *Lexer) ParseArguments() vector.Vector {
+func (lex *Lexer) ParseArguments() *vector.Vector {
 	var (
-		args vector.Vector
-		arg vector.Vector
+		args *vector.Vector
+		arg *vector.Vector
 	)
-	for lex.current != "" {
+	for lex.current != "" && lex.input != "" {
 		if lex.current == "(" {
-			if len(arg) > 0 {
+			if arg.Len() > 0 {
 				args.Push(arg)
 			}
 		} else if lex.current == "," {
 			args.Push(arg)
-			arg = make(vector.Vector, 0)
+			arg = new(vector.Vector)
 			lex.Consume()
 		} else {
 			arg = lex.ParseExpression()
@@ -115,9 +124,9 @@ func (lex *Lexer) ParseArguments() vector.Vector {
 	
 	return args
 }
-func (lex *Lexer) ParseExpression() vector.Vector {
-	var tree vector.Vector
-	for lex.current != "" {
+func (lex *Lexer) ParseExpression() *vector.Vector {
+	tree := new(vector.Vector)
+	for lex.current != "" && lex.input != "" {
 		if lex.current == "," {
 			break
 		} else if lex.current == ")" {
@@ -126,7 +135,7 @@ func (lex *Lexer) ParseExpression() vector.Vector {
 			lex.Consume()
 			args := lex.ParseArguments()
 			if lex.current == ")" {
-				if len(tree) == 0 {
+				if tree.Len() == 0 {
 					tree.Push(NewMessage("", new(vector.Vector)))
 				}
 				
@@ -134,7 +143,7 @@ func (lex *Lexer) ParseExpression() vector.Vector {
 					tree.Push(NewMessage("", new(vector.Vector)))
 				}
 				
-				tree.Last().(IMessage).SetArguments(&args)
+				tree.Last().(IMessage).SetArguments(args)
 				lex.Consume()
 			} else {
 				println("Syntax Error: ')' expected")
@@ -167,7 +176,9 @@ func (lex *Lexer) Lex() {
 
 func Parse(str string) {
 	lex := NewLexer(str)
-	for _, e := range lex.ParseExpression() {
-		println(e)
+	expr := lex.ParseExpression()
+	println(strconv.Itoa(expr.Len()) + " expressions")
+	for i, _ := range *expr {
+		println("Got " + string(i) + " expression")
 	}
 }

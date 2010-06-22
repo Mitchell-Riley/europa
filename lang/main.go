@@ -24,5 +24,5 @@ func main() {
 	println("Setting up VM State...")
 	state := new(europa.State)
 	state.InitializeState()
-	europa.Parse("Object clone do(1 2)")
+	europa.Parse("Object clone do(1, 2)")
 }

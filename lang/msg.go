@@ -48,7 +48,7 @@ type IMessage interface {
 
 func NewMessage(name string, args *vector.Vector) *Message {
 	r := new(Message)
-	r.slots = make(map[string]IObject, DEFAULT_SLOTS_SIZE)
+	//r.slots = make(map[string]IObject, DEFAULT_SLOTS_SIZE)
 	r.name = name
 	r.args = args
 	return r
