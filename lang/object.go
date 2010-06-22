@@ -40,6 +40,7 @@ type Object struct {
 
 type IObject interface {
 	Clone() IObject
+	GetState() IState
 	SetSlot(string, IObject)
 	SetProto(IObject)
 	SetLocals(bool)
@@ -65,9 +66,13 @@ func NewObject(state IState, proto IObject, locals bool, activatable bool, scann
 func (obj *Object) Clone() IObject {
 	r := new(Object)
 	r.proto = obj.proto
-	r.slots = make(map[string]IObject, 8)
+	r.slots = make(map[string]IObject, DEFAULT_SLOTS_SIZE)
 	r.locals = false
 	return r
+}
+
+func (obj *Object) GetState() IState {
+	return *obj.state
 }
 
 func (obj *Object) SetSlot(key string, value IObject) {

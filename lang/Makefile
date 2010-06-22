@@ -14,6 +14,7 @@ $(NAME): build_pkg
 
 build_pkg: $(SRCS)
 	$(GOC) -o $(NAME).6 $(SRCS)
+	$(GOC) -o parser.6 parser.go
 
 clean:
 	$(RM) main.6 $(NAME).6 $(NAME)

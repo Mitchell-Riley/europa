@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>documents</key>
+	<array>
+		<dict>
+			<key>filename</key>
+			<string>lang/block.go</string>
+		</dict>
+		<dict>
+			<key>filename</key>
+			<string>lang/call.go</string>
+		</dict>
+		<dict>
+			<key>filename</key>
+			<string>lang/main.go</string>
+		</dict>
+		<dict>
+			<key>filename</key>
+			<string>lang/Makefile</string>
+		</dict>
+		<dict>
+			<key>filename</key>
+			<string>lang/msg.go</string>
+		</dict>
+		<dict>
+			<key>filename</key>
+			<string>lang/number.go</string>
+		</dict>
+		<dict>
+			<key>filename</key>
+			<string>lang/object.go</string>
+		</dict>
+		<dict>
+			<key>filename</key>
+			<string>lang/state.go</string>
+		</dict>
+	</array>
+	<key>fileHierarchyDrawerWidth</key>
+	<integer>200</integer>
+	<key>metaData</key>
+	<dict/>
+	<key>showFileHierarchyDrawer</key>
+	<true/>
+	<key>windowFrame</key>
+	<string>{{423, 276}, {984, 602}}</string>
+</dict>
+</plist>
