@@ -50,29 +50,35 @@ type ILexer interface {
 	CurrentRune() int
 	NextRune()
 	Lex()
+	ParseIdent()
+	ParseNumber()
 	ParseArguments() vector.Vector
 	ParseExpression() vector.Vector
 }
 
 type Token struct {
-	name string
+	name *strings.Reader
 	arguments vector.Vector
 }
 type IToken interface {
-	SetName(string)
-	GetName() string
+	SetName(*strings.Reader)
+	GetName() *strings.Reader
+	SetArguments(vector.Vector)
 	GetArguments() vector.Vector
 	Equal(IToken) bool
 }
 
-func NewToken(name string) *Token {
+func NewToken(name *strings.Reader) *Token {
 	return &Token{name: name}
 }
-func (tok *Token) SetName(name string) {
+func (tok *Token) SetName(name *strings.Reader) {
 	tok.name = name
 }
-func (tok *Token) GetName() string {
+func (tok *Token) GetName() *strings.Reader {
 	return tok.name
+}
+func (tok *Token) SetArguments(args vector.Vector) {
+	tok.arguments = args
 }
 func (tok *Token) GetArguments() vector.Vector {
 	return tok.arguments
@@ -125,17 +131,16 @@ func (lex *Lexer) ParseArguments() vector.Vector {
 		args vector.Vector
 		arg vector.Vector
 	)
-	arg = nil
 	lparenRune := strings.NewReader("(")
 	commaRune := strings.NewReader(",")
 	for lex.current != nil {
 		if lex.current == lparenRune {
-			if arg != nil {
+			if len(arg) > 0 {
 				args.Push(arg)
 			}
 		} else if lex.current == commaRune {
 			args.Push(arg)
-			arg = nil
+			arg = make(vector.Vector, 0)
 			lex.Consume()
 		} else {
 			arg = lex.ParseExpression()
@@ -146,6 +151,37 @@ func (lex *Lexer) ParseArguments() vector.Vector {
 }
 func (lex *Lexer) ParseExpression() vector.Vector {
 	var tree vector.Vector
+	commaRune := strings.NewReader(",")
+	lparenRune := strings.NewReader("(")
+	rparenRune := strings.NewReader(")")
+	for lex.current != nil {
+		if lex.current == commaRune {
+			break
+		} else if lex.current == rparenRune {
+			break
+		} else if lex.current == lparenRune {
+			lex.Consume()
+			args := lex.ParseArguments()
+			if lex.current == rparenRune {
+				if len(tree) == 0 {
+					tree.Push(NewToken(strings.NewReader("")))
+				}
+				
+				if len(tree.At(-1).(IToken).GetArguments()) > 0 {
+					tree.Push(NewToken(strings.NewReader("")))
+				}
+				
+				tree.At(-1).(IToken).SetArguments(args)
+				lex.Consume()
+			} else {
+				println("Syntax Error: ')' expected")
+			}
+		} else {
+			tree.Push(NewToken(lex.current))
+		}
+	}
+	
+	return tree
 }
 func (lex *Lexer) Lex() {
 	newlineRune, _, _ := strings.NewReader("\n").ReadRune()
