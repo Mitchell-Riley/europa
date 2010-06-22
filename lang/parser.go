@@ -39,67 +39,46 @@ const (
 )
 
 type Lexer struct {
-	s string
-	current string
-	positions vector.Vector
-	tokens vector.Vector
+	input string
+	current *Token
+	next *Token
+}
+
+type ILexer interface {
 }
 
 type Token struct {
 	name string
-	tokenType TokenType
-	charNum int
-	lineNum int
-	next *Token
-	error string
+	arguments vector.Vector
 }
 
 type IToken interface {
 	SetName(string)
 	GetName() string
-	
-	SetType(TokenType)
-	GetType() TokenType
-	
-	SetNext(*Token)
-	GetNext() *Token
-	
-	SetError(string)
-	GetError() string
+	GetArguments() vector.Vector
+	Equal(IToken) bool
 }
 
 func NewToken(name string) *Token {
-	return &Token{name, TK_NONE, -1, -1, nil, ""}
+	return &Token{name: name}
 }
-
 func (tok *Token) SetName(name string) {
 	tok.name = name
 }
-
 func (tok *Token) GetName() string {
 	return tok.name
 }
-
-func (tok *Token) SetType(tt TokenType) {
-	tok.tokenType = tt
+func (tok *Token) GetArguments() vector.Vector {
+	return tok.arguments
+}
+func (tok *Token) Equal(token IToken) bool {
+	return tok.name == token.GetName()
 }
 
-func (tok *Token) GetType() TokenType {
-	return tok.tokenType
-}
-
-func (tok *Token) SetNext(token *Token) {
-	tok.next = token
-}
-
-func (tok *Token) GetNext() *Token {
-	return tok.next
-}
-
-func (tok *Token) SetError(error string) {
-	tok.error = error
-}
-
-func (tok *Token) GetError() string {
-	return tok.error
+func NewLexer(str string) *Lexer {
+	r := new(Lexer)
+	r.input = str
+	r.current = nil
+	r.next = nil
+	return r
 }
