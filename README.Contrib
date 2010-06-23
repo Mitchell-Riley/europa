@@ -1,0 +1,29 @@
+Contributing to Europa
+
+Alright, so here's the deal. I'm not taking some religious viewpoint on
+this issue, if this were the case, I would have chosen the GPLv3. My goal
+is to make sure the system is open for use by everyone, for just about
+any application they can find use for it.
+
+It has served me well to learn the Go language, and I hope that it serves
+other people well to learn the Io language. I am hoping to take the time
+to describe this implementation in a book, so it is my desire to keep the
+terms uniform across all source.
+
+Therefore, if you contribute code to Europa, before you send me patches,
+please heed the following aphorism:
+
+This code should be free and uniform, and with our help, stays this way.
+
+The above relies on you, but I don't believe in asking people to sign
+away their copyright rights, keep those, I don't want them. However, what
+I do ask is that you grant us an irrevocable license under the terms set
+forth in the licenses/Contrib.txt file.
+
+As an addendum to the above, please note that I'm again not asking you to
+give up any of your rights under copyright law, therefore, if at some 
+point you are not happy with this arrangement, let me know, and all I ask
+is that you give us 90 days to remove your contributions, and replace them
+with someone elses work. This will allow a smooth transition from your
+code, to someone elses, and I think its fair for everyone.
+

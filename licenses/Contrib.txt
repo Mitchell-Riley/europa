@@ -1,0 +1,45 @@
+Contributor License Agreement
+
+First off, let me start by saying thank you for taking the time, and
+spending the energy to not only hack away at our codebase, but to take
+your work and send it to us for inclusion in the package. The purpose
+of this document isn't to confuse you, or muddy the waters at all about
+what we expect, and what you should expect, but rather, to make it clear
+to everyone involved, what we want to do with this software package.
+
+I will lay out here, very informally, the key points that we stress, and
+that are non-negotiable.
+
+1. The distribution conditions (these include rights to use, modify and
+   distribute this work) shall remain the same, for everyone, all of the
+   time. You agree to place your contributions under the same terms and
+   conditions for the life of their existance within this software
+   package.
+2. At any time, and for any reason, you may choose to withdrawl your
+   concent to #1 above. Notwithstanding the preceding, you agree that
+   such an action will constitute "notice of intent" to remove your
+   contributions from this software package. This notice will allow
+   the maintainers of this software package to continue to distribute
+   your code for up to 90 days after notice has been given, in good
+   faith, while we work on a replacement solution. You acknowledge, and
+   agree to this stipulation.
+
+By sending a request for your contributions to be included in this
+package, you are agreeing to these conditions have been read, understood
+by you, and that you accept them in their entirety.
+
+The following conditions apply to contributions as well, but are less
+"key principals" as "desirable behaviour." They include:
+
+3. If you spot a problem in the code, do your best to fix it, if you
+   can. A stable codebase benefits everyone.
+4. If you spot a problem in the documentation, do your best to fix it,
+   if you can. Reliable documentation benefits everyone.
+5. When making changes, please try and stay in the style that the code
+   is already written in, this uniformity will make the code easier to
+   understand for everyone, in-so-far as it is entirely uniform in
+   style.
+6. If you happen to be in the Kitchener, Ontario area, contact Jeremy
+   Tregunna, he'd be glad to buy a fellow contributor a beer as a thank
+   you for your contributions.
+

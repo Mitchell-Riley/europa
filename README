@@ -15,12 +15,11 @@ Why?
 	with over 75 addons to contend with, tens of thousands of lines of
 	code... To make large changes requires a lot of attention to detail.
 
-	So rather than contend with the above for exploritory work, a new
-	VM can be written specifically for this purpose.
+	So rather than contend with that, why not write my own?
 
-	Europa's aim will be to produce a high performance IoVM, while
-	retaining as much of the core functionality of Io as humanly possible.
-	Some things, like transformations of { } and [ ] may be discarded.
+	In addition to the above, I wanted to learn the Go language, and what
+	better way to learn a programming language than by implementing one
+	you already know very well?
 
 Requirements
 
@@ -33,5 +32,11 @@ License
 	conditions of the MIT license which may be found in the licenses/MIT.txt
 	file.
 
-	Contributions to Europa's core will need to be placed in kind.
+	Contributions to Europa's core will need to be placed in kind. The
+	rationale for this is that this VM is meant for education purposes, but
+	I don't want to rule out other uses. It is my desire that the whole
+	system remain under one license that is very liberal—One that imposes
+	as few restrictions as possible.
+
+	For my conditions for contribution, please read the README.Contrib file.
 
