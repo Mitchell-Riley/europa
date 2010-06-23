@@ -18,9 +18,7 @@
 package europa
 
 import (
-	"strings"
 	"strconv"
-	"unicode"
 	"container/vector"
 )
 
@@ -40,26 +38,19 @@ type ILexer interface {
 	ParseExpression() vector.Vector
 }
 
-func isAlnum(text string) bool {
-	for i, c := range text {
-		if i % 1 == 0 && !unicode.IsLetter(c) {
-			return false
-		} else {
-			if !(unicode.IsLetter(c) || unicode.IsDigit(c)) {
-				return false
-			}
-		}
+func isLetter(c byte) bool {
+	if (c >= 'a' && c <= 'z') ||
+	   (c >= 'A' && c <= 'Z') {
+		return true
 	}
-	return true
+	return false
 }
 
-func isDigit(text string) bool {
-	for _, c := range text {
-		if !unicode.IsDigit(c) {
-			return false
-		}
+func isDigit(c byte) bool {
+	if c >= '0' && c <= '9' {
+		return true
 	}
-	return true
+	return false
 }
 
 func NewLexer(str string) *Lexer {
@@ -83,36 +74,38 @@ func (lex *Lexer) NextChar() {
 }
 func (lex *Lexer) ParseIdent() {
 	println("*** (ParseIdent)")
-	s := strings.Split(lex.input, " ", 0)[0]
-	println("Got Identifier: " + s)
-	if isAlnum(s) {
-		println("--- lex.next(Before) = " + lex.next)
-		lex.next = lex.input[0:len(s)]
-		println("--- lex.next(After) = " + lex.next)
-		println("--- lex.input(Before) = " + lex.input)
-		lex.input = lex.input[len(s):]
-		println("--- lex.input(After) = " + lex.input)
-	}
+	inlen := len(lex.input)
+	var i int
+	for i = 0; i < inlen && isLetter(lex.input[i]); i++ {}
+	
+	println("--- lex.next(Before) = " + lex.next)
+	lex.next = lex.input[0:i]
+	println("--- lex.next(After) = " + lex.next)
+	println("--- lex.input(Before) = " + lex.input)
+	lex.input = lex.input[i:]
+	println("--- lex.input(After) = " + lex.input)
 }
 func (lex *Lexer) ParseNumber() {
 	println("*** (ParseNumber)")
-	s := strings.Split(lex.input, " ", 1)[0]
-	println("Got Number: " + s)
-	if isDigit(s) {
-		lex.next = lex.input[0:len(s)]
-		lex.input = lex.input[len(s):]
-	}
+	inlen := len(lex.input)
+	var i int
+	for i = 0; i < inlen && isDigit(lex.input[i]); i++ {}
+	println("--- lex.next(Before) = " + lex.next)
+	lex.next = lex.input[0:i]
+	println("--- lex.next(After) = " + lex.next)
+	println("--- lex.input(Before) = " + lex.input)
+	lex.input = lex.input[i:]
+	println("--- lex.input(After) = " + lex.input)
 }
 func (lex *Lexer) ParseArguments() *vector.Vector {
-	var (
-		args *vector.Vector
-		arg *vector.Vector
-	)
-	for lex.current != "" && lex.input != "" {
-		if lex.current == "(" {
+	args := new(vector.Vector)
+	arg := new(vector.Vector)
+	for lex.current != "" {
+		if lex.current == ")" {
 			if arg.Len() > 0 {
 				args.Push(arg)
 			}
+			lex.Consume()
 		} else if lex.current == "," {
 			args.Push(arg)
 			arg = new(vector.Vector)
@@ -126,7 +119,7 @@ func (lex *Lexer) ParseArguments() *vector.Vector {
 }
 func (lex *Lexer) ParseExpression() *vector.Vector {
 	tree := new(vector.Vector)
-	for lex.current != "" && lex.input != "" {
+	for lex.current != "" {
 		if lex.current == "," {
 			break
 		} else if lex.current == ")" {
@@ -149,7 +142,9 @@ func (lex *Lexer) ParseExpression() *vector.Vector {
 				println("Syntax Error: ')' expected")
 			}
 		} else {
+			println("*** (ParseExpression) / fallback -- lex.current = " + lex.current + "; lex.next = " + lex.next)
 			tree.Push(NewMessage(lex.current, new(vector.Vector)))
+			lex.Consume()
 		}
 	}
 	
@@ -164,9 +159,9 @@ func (lex *Lexer) Lex() {
 	} else if lex.CurrentChar() == ' ' {
 		lex.NextChar()
 		lex.Lex()
-	} else if isAlnum(string(lex.CurrentChar())) {
+	} else if isLetter(lex.CurrentChar()) {
 		lex.ParseIdent()
-	} else if isDigit(string(lex.CurrentChar())) {
+	} else if isDigit(lex.CurrentChar()) {
 		lex.ParseNumber()
 	} else {
 		lex.next = string(lex.CurrentChar())
@@ -178,7 +173,7 @@ func Parse(str string) {
 	lex := NewLexer(str)
 	expr := lex.ParseExpression()
 	println(strconv.Itoa(expr.Len()) + " expressions")
-	for i, _ := range *expr {
-		println("Got " + string(i) + " expression")
+	for _, e := range *expr {
+		println("Got " + e.(IMessage).GetName() + " expression")
 	}
 }
