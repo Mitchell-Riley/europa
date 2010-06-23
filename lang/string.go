@@ -10,19 +10,41 @@
  * be found in the LICENSE.MIT file included in this distribution.
  *******************************************************************
  * Project: Europa Programming Language
- * File: 
- * Description: 
+ * File: string.go
+ * Description: UTF-8 Strings
  ******************************************************************/
 
-package main
+package europa
 
-import (
-	"./europa"
-)
+type String struct {
+	*Object
+	value string
+}
 
-func main() {
-	println("Setting up VM State...")
-	state := new(europa.State)
-	state.InitializeState()
-	europa.Parse("test.io")
+type IString interface {
+	IObject
+	
+	SetValue(string)
+	GetValue() string
+}
+
+func NewString(str string) IString {
+	r := new(String)
+	r.slots = make(map[string]IObject, DEFAULT_SLOTS_SIZE)
+	r.value = str
+	return r
+}
+
+func (str *String) Clone() IObject {
+	r := NewString(str.value)
+	r.SetProto(str)
+	return r
+}
+
+func (str *String) SetValue(val string) {
+	str.value = val
+}
+
+func (str *String) GetValue() string {
+	return str.value
 }

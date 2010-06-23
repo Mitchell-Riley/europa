@@ -18,6 +18,8 @@
 package europa
 
 import (
+	"os"
+	"bytes"
 	"strconv"
 	"container/vector"
 )
@@ -45,7 +47,6 @@ func isLetter(c byte) bool {
 	}
 	return false
 }
-
 func isDigit(c byte) bool {
 	if c >= '0' && c <= '9' {
 		return true
@@ -73,29 +74,25 @@ func (lex *Lexer) NextChar() {
 	lex.input = lex.input[1:]
 }
 func (lex *Lexer) ParseIdent() {
-	println("*** (ParseIdent)")
 	inlen := len(lex.input)
 	var i int
 	for i = 0; i < inlen && isLetter(lex.input[i]); i++ {}
-	
-	println("--- lex.next(Before) = " + lex.next)
 	lex.next = lex.input[0:i]
-	println("--- lex.next(After) = " + lex.next)
-	println("--- lex.input(Before) = " + lex.input)
 	lex.input = lex.input[i:]
-	println("--- lex.input(After) = " + lex.input)
 }
 func (lex *Lexer) ParseNumber() {
-	println("*** (ParseNumber)")
 	inlen := len(lex.input)
 	var i int
 	for i = 0; i < inlen && isDigit(lex.input[i]); i++ {}
-	println("--- lex.next(Before) = " + lex.next)
 	lex.next = lex.input[0:i]
-	println("--- lex.next(After) = " + lex.next)
-	println("--- lex.input(Before) = " + lex.input)
 	lex.input = lex.input[i:]
-	println("--- lex.input(After) = " + lex.input)
+}
+func (lex *Lexer) ParseString() {
+	inlen := len(lex.input)
+	var i int
+	for i = 1; i < inlen && lex.input[i] != '"'; i++ {}
+	lex.next = lex.input[0:i + 1]
+	lex.input = lex.input[i + 1:]
 }
 func (lex *Lexer) ParseArguments() *vector.Vector {
 	args := new(vector.Vector)
@@ -163,17 +160,34 @@ func (lex *Lexer) Lex() {
 		lex.ParseIdent()
 	} else if isDigit(lex.CurrentChar()) {
 		lex.ParseNumber()
+	} else if lex.CurrentChar() == '"' {
+		lex.ParseString()
 	} else {
 		lex.next = string(lex.CurrentChar())
 		lex.NextChar()
 	}
 }
 
-func Parse(str string) {
-	lex := NewLexer(str)
+func Parse(filename string) os.Error {
+	f, err := os.Open(filename, os.O_RDONLY, 0)
+	if err != nil {
+		return err
+	}
+	defer f.Close()
+	
+	var result []byte
+	buf := make([]byte, 4096)
+	for {
+		n, err := f.Read(buf[0:])
+		result = bytes.Add(result, buf[0:n])
+		if err != os.EOF {
+			break
+		}
+	}
+	
+	lex := NewLexer(string(result))
 	expr := lex.ParseExpression()
 	println(strconv.Itoa(expr.Len()) + " expressions")
-	for _, e := range *expr {
-		println("Got " + e.(IMessage).GetName() + " expression")
-	}
+	
+	return nil
 }
