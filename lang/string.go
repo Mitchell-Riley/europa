@@ -26,6 +26,7 @@ type IString interface {
 	
 	SetValue(string)
 	GetValue() string
+	Size(IString, IObject, IMessage) INumber
 }
 
 func NewString(str string) IString {
@@ -47,4 +48,8 @@ func (str *String) SetValue(val string) {
 
 func (str *String) GetValue() string {
 	return str.value
+}
+
+func (str *String) Size(self IString, locals IObject, msg IMessage) INumber {
+	return NewNumber(float64(len(self.GetValue())))
 }

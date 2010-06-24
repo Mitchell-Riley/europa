@@ -191,3 +191,8 @@ func Parse(filename string) os.Error {
 	
 	return nil
 }
+
+func ParseString(code string) {
+	lex := NewLexer(code)
+	lex.ParseExpression()
+}

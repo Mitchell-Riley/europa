@@ -42,6 +42,7 @@ type IMessage interface {
 
 	EvalArgAt(IObject, int) IObject
 	NumberArgAt(IObject, int) INumber
+	StringArgAt(IObject, int) IString
 	DoInContext(IObject, IMessage) IObject
 	PerformOn(IObject, IObject) IObject
 }
@@ -92,6 +93,10 @@ func (msg *Message) EvalArgAt(locals IObject, n int) IObject {
 
 func (msg *Message) NumberArgAt(locals IObject, n int) INumber {
 	return msg.EvalArgAt(locals, n).(INumber)
+}
+
+func (msg *Message) StringArgAt(locals IObject, n int) IString {
+	return msg.EvalArgAt(locals, n).(IString)
 }
 
 func (msg *Message) DoInContext(locals IObject, m IMessage) IObject {
