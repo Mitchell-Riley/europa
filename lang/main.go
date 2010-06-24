@@ -26,6 +26,7 @@ import (
 const EUROPA_VERSION = "0.1.0"
 
 func displayUsage() {
+	fmt.Fprintf(os.Stderr, "Usage: %s\n", os.Args[0])
 	flag.VisitAll(func(f *flag.Flag) {
 		fmt.Fprintf(os.Stderr, "\t-%-10s%s\n", f.Name, f.Usage)
 	})
@@ -42,7 +43,6 @@ func main() {
 	flag.Parse()
 
 	if hflag {
-		fmt.Fprintf(os.Stderr, "Usage: %s\n", os.Args[0])
 		displayUsage()
 		return
 	}
@@ -57,7 +57,12 @@ func main() {
 	state.InitializeState()
 
 	if eflag == "" {
-		europa.Parse("test.io")
+		if len(os.Args) > 1 {
+			// Ignore more than 1 filename, just pick the first.
+			europa.Parse(os.Args[1])
+		} else {
+			displayUsage()
+		}
 	} else {
 		europa.ParseString(eflag)
 	}
