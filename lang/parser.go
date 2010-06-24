@@ -28,6 +28,7 @@ type Lexer struct {
 	input string
 	current string
 	next string
+	line int
 }
 type ILexer interface {
 	Consume()
@@ -59,6 +60,7 @@ func NewLexer(str string) *Lexer {
 	r.input = str
 	r.current = ""
 	r.next = ""
+	r.line = 1
 	r.Consume()
 	r.Consume()
 	return r
@@ -139,7 +141,7 @@ func (lex *Lexer) ParseExpression() *vector.Vector {
 				println("Syntax Error: ')' expected")
 			}
 		} else {
-			println("*** (ParseExpression) / fallback -- lex.current = " + lex.current + "; lex.next = " + lex.next)
+			println("*** (ParseExpression) / fallback (line: " + strconv.Itoa(lex.line) + ") -- lex.current = " + lex.current + "; lex.next = " + lex.next)
 			tree.Push(NewMessage(lex.current, new(vector.Vector)))
 			lex.Consume()
 		}
@@ -151,6 +153,7 @@ func (lex *Lexer) Lex() {
 	if lex.input == "" {
 		lex.next = ""
 	} else if lex.CurrentChar() == '\n' {
+		lex.line += 1
 		lex.next = ";"
 		lex.NextChar()
 	} else if lex.CurrentChar() == ' ' {
