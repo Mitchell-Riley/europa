@@ -26,6 +26,9 @@ type Message struct {
 
 	/* List of arguments */
 	args *vector.Vector
+	
+	/* Cached result */
+	cached IObject
 
 	/* Next message in the chain */
 	next *Message
@@ -38,6 +41,8 @@ type IMessage interface {
 	SetName(string)
 	GetArguments() *vector.Vector
 	SetArguments(*vector.Vector)
+	GetCached() IObject
+	SetCached(IObject)
 	SetNext(*Message)
 
 	EvalArgAt(IObject, int) IObject
@@ -52,6 +57,7 @@ func NewMessage(name string, args *vector.Vector) *Message {
 	//r.slots = make(map[string]IObject, DEFAULT_SLOTS_SIZE)
 	r.name = name
 	r.args = args
+	r.cached = nil
 	return r
 }
 
@@ -75,6 +81,14 @@ func (msg *Message) GetArguments() *vector.Vector {
 
 func (msg *Message) SetArguments(args *vector.Vector) {
 	msg.args = args
+}
+
+func (msg *Message) GetCached() IObject {
+	return msg.cached
+}
+
+func (msg *Message) SetCached(cached IObject) {
+	
 }
 
 func (msg *Message) SetNext(next *Message) {
@@ -115,12 +129,16 @@ func (msg *Message) PerformOn(locals IObject, target IObject) IObject {
 	var m = msg
 	var result IObject
 
-	for ; m.next != nil; m = m.next {
-		if m.name == ";" {
-			target = cached
-		} else {
-			result = target.Perform(locals, m)
+	if result == nil {
+		for ; m.next != nil; m = m.next {
+			if m.name == ";" {
+				target = cached
+			} else {
+				result = target.Perform(locals, m)
+			}
 		}
+	} else {
+		result = msg.GetCached()
 	}
 
 	return result

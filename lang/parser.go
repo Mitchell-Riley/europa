@@ -121,8 +121,6 @@ func (lex *Lexer) ParseExpression() *vector.Vector {
 	for lex.current != "" {
 		if lex.current == "," {
 			break
-		} else if lex.current == ")" {
-			break
 		} else if lex.current == "(" {
 			lex.Consume()
 			args := lex.ParseArguments()
@@ -132,14 +130,17 @@ func (lex *Lexer) ParseExpression() *vector.Vector {
 				}
 				
 				if tree.Last().(IMessage).GetArguments().Len() > 0 {
+					println("*** Arguments are empty")
 					tree.Push(NewMessage("", new(vector.Vector)))
 				}
 				
 				tree.Last().(IMessage).SetArguments(args)
-				lex.Consume()
 			} else {
 				println("Syntax Error: ')' expected")
 			}
+			println(len(*args))
+		} else if lex.current == ")" {
+			break
 		} else {
 			println("*** (ParseExpression) / fallback (line: " + strconv.Itoa(lex.line) + ") -- lex.current = " + lex.current + "; lex.next = " + lex.next)
 			tree.Push(NewMessage(lex.current, new(vector.Vector)))
@@ -153,9 +154,9 @@ func (lex *Lexer) Lex() {
 	if lex.input == "" {
 		lex.next = ""
 	} else if lex.CurrentChar() == '\n' {
-		lex.line += 1
 		lex.next = ";"
 		lex.NextChar()
+		lex.line += 1
 	} else if lex.CurrentChar() == ' ' {
 		lex.NextChar()
 		lex.Lex()
@@ -171,7 +172,7 @@ func (lex *Lexer) Lex() {
 	}
 }
 
-func Parse(filename string) os.Error {
+func Parse(state IState, filename string) os.Error {
 	f, err := os.Open(filename, os.O_RDONLY, 0)
 	if err != nil {
 		return err
@@ -190,12 +191,13 @@ func Parse(filename string) os.Error {
 	
 	lex := NewLexer(string(result))
 	expr := lex.ParseExpression()
-	println(strconv.Itoa(expr.Len()) + " expressions")
+	state.EvaluateTree(*expr)
 	
 	return nil
 }
 
-func ParseString(code string) {
+func ParseString(state IState, code string) {
 	lex := NewLexer(code)
-	lex.ParseExpression()
+	expr := lex.ParseExpression()
+	state.EvaluateTree(*expr)
 }

@@ -16,6 +16,8 @@
 
 package europa
 
+import "container/vector"
+
 type State struct {
 	lobby IObject
 }
@@ -23,6 +25,7 @@ type State struct {
 type IState interface {
 	GetLobby() IObject
 	InitializeState()
+	EvaluateTree(vector.Vector)
 }
 
 func (state *State) GetLobby() IObject {
@@ -37,3 +40,13 @@ func (state *State) InitializeState() {
 	state.lobby.SetSlot("Object", object)
 }
 
+func (state *State) EvaluateTree(tree vector.Vector) {
+	tree.Do(func(elem interface{}) {
+		msg := elem.(IMessage)
+		println(msg.GetName())
+		msg.GetArguments().Do(func(item interface{}) {
+			arg := item.(IMessage)
+			println(arg.GetName())
+		})
+	})
+}

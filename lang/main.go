@@ -36,13 +36,14 @@ func main() {
 	var eflag string
 	var versionflag bool
 	var hflag bool
+	flag.Usage = displayUsage
 	flag.StringVar(&eflag, "e", "", "Specify code to evaluate at the command line.")
 	flag.BoolVar(&versionflag, "version", false, "Displays the interpreter version information.")
 	flag.BoolVar(&versionflag, "v", false, "Displays the interpreter version information.")
 	flag.BoolVar(&hflag, "h", false, "Displays the usage information to the screen.")
 	flag.Parse()
 
-	if hflag {
+	if hflag || len(os.Args) == 1 {
 		displayUsage()
 		return
 	}
@@ -52,18 +53,16 @@ func main() {
 		return
 	}
 
-	println("Setting up VM State...")
-	state := new(europa.State)
-	state.InitializeState()
+	if len(os.Args) > 1 {
+		println("Setting up VM State...")
+		state := new(europa.State)
+		state.InitializeState()
 
-	if eflag == "" {
-		if len(os.Args) > 1 {
+		if eflag == "" {
 			// Ignore more than 1 filename, just pick the first.
-			europa.Parse(os.Args[1])
+			europa.Parse(state, os.Args[1])
 		} else {
-			displayUsage()
+			europa.ParseString(state, eflag)
 		}
-	} else {
-		europa.ParseString(eflag)
 	}
 }
