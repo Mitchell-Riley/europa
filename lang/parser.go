@@ -32,8 +32,8 @@ type Lexer struct {
 }
 type ILexer interface {
 	Consume()
-	CurrentRune() int
-	NextRune()
+	CurrentChar() byte
+	NextChar()
 	Lex()
 	ParseIdent()
 	ParseNumber()

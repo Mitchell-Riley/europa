@@ -1,7 +1,7 @@
 Contributor License Agreement
 
 First off, let me start by saying thank you for taking the time, and
-spending the energy to not only hack away at our codebase, but to take
+spending the energy to not only hack away at our codebase, and to take
 your work and send it to us for inclusion in the package. The purpose
 of this document isn't to confuse you, or muddy the waters at all about
 what we expect, and what you should expect, but rather, to make it clear
@@ -14,7 +14,9 @@ that are non-negotiable.
    distribute this work) shall remain the same, for everyone, all of the
    time. You agree to place your contributions under the same terms and
    conditions for the life of their existance within this software
-   package.
+   package. You may apply different conditions to your code, but you
+   grant us rights to distribute it under our terms in this package
+   without any additional conditions.
 2. At any time, and for any reason, you may choose to withdrawl your
    concent to #1 above. Notwithstanding the preceding, you agree that
    such an action will constitute "notice of intent" to remove your
