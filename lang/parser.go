@@ -19,7 +19,6 @@ package europa
 
 import (
 	"os"
-	"bytes"
 	"strconv"
 	"container/vector"
 )
@@ -183,7 +182,7 @@ func Parse(state IState, filename string) os.Error {
 	buf := make([]byte, 4096)
 	for {
 		n, err := f.Read(buf[0:])
-		result = bytes.Add(result, buf[0:n])
+		result = append(result, buf[0:n]...)
 		if err != os.EOF {
 			break
 		}
