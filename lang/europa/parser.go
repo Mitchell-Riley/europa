@@ -18,6 +18,7 @@
 package europa
 
 import (
+	"io"
 	"os"
 	"strconv"
 )
@@ -173,27 +174,27 @@ func (lex *Lexer) Lex() {
 	}
 }
 
-func Parse(state IState, filename string) os.Error {
-	f, err := os.Open(filename, os.O_RDONLY, 0)
+func Parse(state IState, filename string) error {
+	f, err := os.OpenFile(filename, os.O_RDONLY, 0)
 	if err != nil {
 		return err
 	}
 	defer f.Close()
-	
+
 	var result []byte
 	buf := make([]byte, 4096)
 	for {
 		n, err := f.Read(buf[0:])
 		result = append(result, buf[0:n]...)
-		if err != os.EOF {
+		if err != io.EOF {
 			break
 		}
 	}
-	
+
 	lex := NewLexer(string(result))
 	expr := lex.ParseExpression()
 	state.EvaluateTree(*expr)
-	
+
 	return nil
 }
 
