@@ -20,14 +20,13 @@ package europa
 import (
 	"os"
 	"strconv"
-	"container/vector"
 )
 
 type Lexer struct {
-	input string
+	input   string
 	current string
-	next string
-	line int
+	next    string
+	line    int
 }
 type ILexer interface {
 	Consume()
@@ -36,13 +35,12 @@ type ILexer interface {
 	Lex()
 	ParseIdent()
 	ParseNumber()
-	ParseArguments() vector.Vector
-	ParseExpression() vector.Vector
+	ParseArguments() []interface{}
+	ParseExpression() []interface{}
 }
 
 func isLetter(c byte) bool {
-	if (c >= 'a' && c <= 'z') ||
-	   (c >= 'A' && c <= 'Z') {
+	if (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') {
 		return true
 	}
 	return false
@@ -77,46 +75,49 @@ func (lex *Lexer) NextChar() {
 func (lex *Lexer) ParseIdent() {
 	inlen := len(lex.input)
 	var i int
-	for i = 0; i < inlen && isLetter(lex.input[i]); i++ {}
+	for i = 0; i < inlen && isLetter(lex.input[i]); i++ {
+	}
 	lex.next = lex.input[0:i]
 	lex.input = lex.input[i:]
 }
 func (lex *Lexer) ParseNumber() {
 	inlen := len(lex.input)
 	var i int
-	for i = 0; i < inlen && isDigit(lex.input[i]); i++ {}
+	for i = 0; i < inlen && isDigit(lex.input[i]); i++ {
+	}
 	lex.next = lex.input[0:i]
 	lex.input = lex.input[i:]
 }
 func (lex *Lexer) ParseString() {
 	inlen := len(lex.input)
 	var i int
-	for i = 1; i < inlen && lex.input[i] != '"'; i++ {}
-	lex.next = lex.input[0:i + 1]
-	lex.input = lex.input[i + 1:]
+	for i = 1; i < inlen && lex.input[i] != '"'; i++ {
+	}
+	lex.next = lex.input[0 : i+1]
+	lex.input = lex.input[i+1:]
 }
-func (lex *Lexer) ParseArguments() *vector.Vector {
-	args := new(vector.Vector)
-	arg := new(vector.Vector)
+func (lex *Lexer) ParseArguments() *[]interface{} {
+	args := new([]interface{})
+	arg := new([]interface{})
 	for lex.current != "" {
 		if lex.current == ")" {
-			if arg.Len() > 0 {
-				args.Push(arg)
+			if len(*arg) > 0 {
+				*args = append(*args, arg)
 			}
 			lex.Consume()
 		} else if lex.current == "," {
-			args.Push(arg)
-			arg = new(vector.Vector)
+			*args = append(*args, new([]interface{}))
+			arg = new([]interface{})
 			lex.Consume()
 		} else {
 			arg = lex.ParseExpression()
 		}
 	}
-	
+
 	return args
 }
-func (lex *Lexer) ParseExpression() *vector.Vector {
-	tree := new(vector.Vector)
+func (lex *Lexer) ParseExpression() *[]interface{} {
+	tree := new([]interface{})
 	for lex.current != "" {
 		if lex.current == "," {
 			break
@@ -124,16 +125,16 @@ func (lex *Lexer) ParseExpression() *vector.Vector {
 			lex.Consume()
 			args := lex.ParseArguments()
 			if lex.current == ")" {
-				if tree.Len() == 0 {
-					tree.Push(NewMessage("", new(vector.Vector)))
+				if len(*tree) == 0 {
+					*tree = append(*tree, NewMessage("", new([]interface{})))
 				}
-				
-				if tree.Last().(IMessage).GetArguments().Len() > 0 {
+
+				if len(*((*tree)[len(*tree)-1].(IMessage).GetArguments())) > 0 {
 					println("*** Arguments are empty")
-					tree.Push(NewMessage("", new(vector.Vector)))
+					*tree = append(*tree, NewMessage("", new([]interface{})))
 				}
-				
-				tree.Last().(IMessage).SetArguments(args)
+
+				(*tree)[len(*tree)-1].(IMessage).SetArguments(args)
 			} else {
 				println("Syntax Error: ')' expected")
 			}
@@ -142,11 +143,12 @@ func (lex *Lexer) ParseExpression() *vector.Vector {
 			break
 		} else {
 			println("*** (ParseExpression) / fallback (line: " + strconv.Itoa(lex.line) + ") -- lex.current = " + lex.current + "; lex.next = " + lex.next)
-			tree.Push(NewMessage(lex.current, new(vector.Vector)))
+
+			*tree = append(*tree, NewMessage(lex.current, new([]interface{})))
 			lex.Consume()
 		}
 	}
-	
+
 	return tree
 }
 func (lex *Lexer) Lex() {

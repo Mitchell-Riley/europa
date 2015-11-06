@@ -16,8 +16,6 @@
 
 package europa
 
-import "container/vector"
-
 type Message struct {
 	*Object
 
@@ -25,8 +23,8 @@ type Message struct {
 	name string
 
 	/* List of arguments */
-	args *vector.Vector
-	
+	args *[]interface{}
+
 	/* Cached result */
 	cached IObject
 
@@ -39,8 +37,8 @@ type IMessage interface {
 
 	GetName() string
 	SetName(string)
-	GetArguments() *vector.Vector
-	SetArguments(*vector.Vector)
+	GetArguments() *[]interface{}
+	SetArguments(*[]interface{})
 	GetCached() IObject
 	SetCached(IObject)
 	SetNext(*Message)
@@ -52,7 +50,7 @@ type IMessage interface {
 	PerformOn(IObject, IObject) IObject
 }
 
-func NewMessage(name string, args *vector.Vector) *Message {
+func NewMessage(name string, args *[]interface{}) *Message {
 	r := new(Message)
 	//r.slots = make(map[string]IObject, DEFAULT_SLOTS_SIZE)
 	r.name = name
@@ -75,11 +73,11 @@ func (msg *Message) SetName(str string) {
 	msg.name = str
 }
 
-func (msg *Message) GetArguments() *vector.Vector {
+func (msg *Message) GetArguments() *[]interface{} {
 	return msg.args
 }
 
-func (msg *Message) SetArguments(args *vector.Vector) {
+func (msg *Message) SetArguments(args *[]interface{}) {
 	msg.args = args
 }
 
@@ -88,7 +86,7 @@ func (msg *Message) GetCached() IObject {
 }
 
 func (msg *Message) SetCached(cached IObject) {
-	
+
 }
 
 func (msg *Message) SetNext(next *Message) {
@@ -96,7 +94,7 @@ func (msg *Message) SetNext(next *Message) {
 }
 
 func (msg *Message) EvalArgAt(locals IObject, n int) IObject {
-	m := msg.args.At(n).(IMessage)
+	m := (*msg.args)[n].(IMessage)
 
 	if m != nil {
 		return m.PerformOn(locals, locals)
@@ -115,7 +113,7 @@ func (msg *Message) StringArgAt(locals IObject, n int) IString {
 
 func (msg *Message) DoInContext(locals IObject, m IMessage) IObject {
 	ctx := m.EvalArgAt(locals, 0)
-	if m.GetArguments().Len() >= 2 {
+	if len(*m.GetArguments()) >= 2 {
 		locals = m.EvalArgAt(locals, 1)
 	} else {
 		locals = ctx

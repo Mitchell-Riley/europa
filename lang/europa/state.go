@@ -16,7 +16,11 @@
 
 package europa
 
-import "container/vector"
+func enumSlice(s *[]interface{}, f func(elem interface{})) {
+	for _, e := range *s {
+		f(e)
+	}
+}
 
 type State struct {
 	lobby IObject
@@ -25,7 +29,7 @@ type State struct {
 type IState interface {
 	GetLobby() IObject
 	InitializeState()
-	EvaluateTree(vector.Vector)
+	EvaluateTree([]interface{})
 }
 
 func (state *State) GetLobby() IObject {
@@ -40,11 +44,11 @@ func (state *State) InitializeState() {
 	state.lobby.SetSlot("Object", object)
 }
 
-func (state *State) EvaluateTree(tree vector.Vector) {
-	tree.Do(func(elem interface{}) {
+func (state *State) EvaluateTree(tree []interface{}) {
+	enumSlice(&tree, func(elem interface{}) {
 		msg := elem.(IMessage)
 		println(msg.GetName())
-		msg.GetArguments().Do(func(item interface{}) {
+		enumSlice(msg.GetArguments(), func(item interface{}) {
 			arg := item.(IMessage)
 			println(arg.GetName())
 		})
