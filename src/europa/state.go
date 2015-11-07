@@ -16,6 +16,10 @@
 
 package europa
 
+import (
+	"fmt"
+)
+
 func enumSlice(s *[]interface{}, f func(elem interface{})) {
 	for _, e := range *s {
 		f(e)
@@ -47,10 +51,10 @@ func (state *State) InitializeState() {
 func (state *State) EvaluateTree(tree []interface{}) {
 	enumSlice(&tree, func(elem interface{}) {
 		msg := elem.(IMessage)
-		println(msg.GetName())
+		fmt.Println(msg.GetName())
 		enumSlice(msg.GetArguments(), func(item interface{}) {
 			arg := item.(IMessage)
-			println(arg.GetName())
+			fmt.Println(arg.GetName())
 		})
 	})
 }

@@ -18,6 +18,7 @@
 package europa
 
 import (
+	"fmt"
 	"io"
 	"os"
 	"strconv"
@@ -134,19 +135,19 @@ func (lex *Lexer) ParseExpression() *[]interface{} {
 				}
 
 				if len(*((*tree)[len(*tree)-1].(IMessage).GetArguments())) > 0 {
-					println("*** Arguments are empty")
+					fmt.Println("*** Arguments are empty")
 					*tree = append(*tree, NewMessage("", new([]interface{})))
 				}
 
 				(*tree)[len(*tree)-1].(IMessage).SetArguments(args)
 			} else {
-				println("Syntax Error: ')' expected")
+				fmt.Println("Syntax Error: ')' expected")
 			}
-			println(len(*args))
+			fmt.Println(len(*args))
 		} else if lex.current == ")" {
 			break
 		} else {
-			println("*** (ParseExpression) / fallback (line: " + strconv.Itoa(lex.line) + ") -- lex.current = " + lex.current + "; lex.next = " + lex.next)
+			fmt.Println("*** (ParseExpression) / fallback (line: " + strconv.Itoa(lex.line) + ") -- lex.current = " + lex.current + "; lex.next = " + lex.next)
 
 			*tree = append(*tree, NewMessage(lex.current, new([]interface{})))
 			lex.Consume()

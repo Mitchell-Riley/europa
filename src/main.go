@@ -10,17 +10,17 @@
  * be found in the LICENSE.MIT file included in this distribution.
  *******************************************************************
  * Project: Europa Programming Language
- * File: 
- * Description: 
+ * File:
+ * Description:
  ******************************************************************/
 
 package main
 
 import (
-	"os"
-	"fmt"
-	"flag"
 	"./europa"
+	"flag"
+	"fmt"
+	"os"
 )
 
 const EUROPA_VERSION = "0.1.0"
@@ -49,12 +49,12 @@ func main() {
 	}
 
 	if versionflag {
-		println(string(EUROPA_VERSION))
+		fmt.Println(string(EUROPA_VERSION))
 		return
 	}
 
 	if len(os.Args) > 1 {
-		println("Setting up VM State...")
+		fmt.Println("Setting up VM State...")
 		state := new(europa.State)
 		state.InitializeState()
 
