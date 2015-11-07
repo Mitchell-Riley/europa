@@ -18,10 +18,10 @@ package europa
 
 type Call struct {
 	*Object
-	sender IObject
-	message IMessage
-	target IObject
-	context IObject
+	sender    IObject
+	message   IMessage
+	target    IObject
+	context   IObject
 	activated IBlock
 }
 
@@ -30,11 +30,11 @@ type ICall interface {
 }
 
 func NewCall(sender IObject, target IObject, msg IMessage, context IObject, activated IBlock) ICall {
-	c := new(Call)
-	c.sender = sender
-	c.target = target
-	c.message = msg
-	c.context = context
-	c.activated = activated
-	return c
+	return &Call{
+		sender:    sender,
+		target:    target,
+		message:   msg,
+		context:   context,
+		activated: activated,
+	}
 }

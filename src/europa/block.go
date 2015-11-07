@@ -18,10 +18,10 @@ package europa
 
 type Block struct {
 	*Object
-	cfunc (func(IObject, IObject, IMessage) IObject)
-	message Message
+	cfunc    (func(IObject, IObject, IMessage) IObject)
+	message  Message
 	argNames []string
-	scope IObject
+	scope    IObject
 }
 
 type IBlock interface {
@@ -29,13 +29,13 @@ type IBlock interface {
 }
 
 func (blk *Block) Clone() IObject {
-	r := new(Block)
-	r.proto = blk
-	r.message = blk.message
-	r.argNames = blk.argNames
-	r.scope = blk.scope
-	r.activatable = blk.activatable
-	return r
+	return &Block{
+		Object:   &Object{proto: blk, activatable: blk.activatable},
+		message:  blk.message,
+		argNames: blk.argNames,
+		scope:    blk.scope,
+	}
+
 }
 
 func (blk *Block) Activate(target IObject, locals IObject, m IMessage, ctx IObject) IObject {

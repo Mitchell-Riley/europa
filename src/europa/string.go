@@ -23,17 +23,17 @@ type String struct {
 
 type IString interface {
 	IObject
-	
+
 	SetValue(string)
 	GetValue() string
 	Size(IString, IObject, IMessage) INumber
 }
 
 func NewString(str string) IString {
-	r := new(String)
-	r.slots = make(map[string]IObject, DEFAULT_SLOTS_SIZE)
-	r.value = str
-	return r
+	return &String{
+		Object: &Object{slots: make(map[string]IObject, DEFAULT_SLOTS_SIZE)},
+		value:  str,
+	}
 }
 
 func (str *String) Clone() IObject {

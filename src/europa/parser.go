@@ -29,6 +29,7 @@ type Lexer struct {
 	next    string
 	line    int
 }
+
 type ILexer interface {
 	Consume()
 	CurrentChar() byte
@@ -54,15 +55,17 @@ func isDigit(c byte) bool {
 }
 
 func NewLexer(str string) *Lexer {
-	r := new(Lexer)
-	r.input = str
-	r.current = ""
-	r.next = ""
-	r.line = 1
+	r := &Lexer{
+		input:   str,
+		current: "",
+		next:    "",
+		line:    1,
+	}
 	r.Consume()
 	r.Consume()
 	return r
 }
+
 func (lex *Lexer) Consume() {
 	lex.current = lex.next
 	lex.Lex()

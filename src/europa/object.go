@@ -26,7 +26,7 @@ type Object struct {
 	proto IObject
 
 	/* Slot table. Simple string->object mapping. */
-	slots map[string] IObject
+	slots map[string]IObject
 
 	/* Are we a locals object? */
 	locals bool
@@ -53,22 +53,22 @@ type IObject interface {
 }
 
 func NewObject(state IState, proto IObject, locals bool, activatable bool, scanned bool) IObject {
-	r := new(Object)
-	r.state = &state
-	r.slots = make(map[string]IObject, DEFAULT_SLOTS_SIZE)
-	r.proto = proto
-	r.locals = locals
-	r.activatable = activatable
-	r.scanned = scanned
-	return r
+	return &Object{
+		state:       &state,
+		slots:       make(map[string]IObject, DEFAULT_SLOTS_SIZE),
+		proto:       proto,
+		locals:      locals,
+		activatable: activatable,
+		scanned:     scanned,
+	}
 }
 
 func (obj *Object) Clone() IObject {
-	r := new(Object)
-	r.proto = obj.proto
-	r.slots = make(map[string]IObject, DEFAULT_SLOTS_SIZE)
-	r.locals = false
-	return r
+	return &Object{
+		proto:  obj.proto,
+		slots:  make(map[string]IObject, DEFAULT_SLOTS_SIZE),
+		locals: false,
+	}
 }
 
 func (obj *Object) GetState() IState {
@@ -94,7 +94,6 @@ func (obj *Object) GetActivatable() bool {
 func (obj *Object) SetActivatable(val bool) {
 	obj.activatable = val
 }
-
 
 func (obj *Object) GetSlot(key string) (v IObject, ctx IObject) {
 	var ok bool

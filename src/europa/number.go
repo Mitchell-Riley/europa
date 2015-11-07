@@ -31,10 +31,10 @@ type INumber interface {
 }
 
 func NewNumber(num float64) INumber {
-	r := new(Number)
-	r.slots = make(map[string]IObject, DEFAULT_SLOTS_SIZE)
-	r.value = num
-	return r
+	return &Number{
+		Object: &Object{slots: make(map[string]IObject, DEFAULT_SLOTS_SIZE)},
+		value:  num,
+	}
 }
 
 func (num *Number) Clone() IObject {

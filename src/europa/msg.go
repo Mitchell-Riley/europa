@@ -51,18 +51,16 @@ type IMessage interface {
 }
 
 func NewMessage(name string, args *[]interface{}) *Message {
-	r := new(Message)
-	//r.slots = make(map[string]IObject, DEFAULT_SLOTS_SIZE)
-	r.name = name
-	r.args = args
-	r.cached = nil
-	return r
+	return &Message{
+		//slots: make(map[string]IObject, DEFAULT_SLOTS_SIZE),
+		name:   name,
+		args:   args,
+		cached: nil,
+	}
 }
 
 func (msg *Message) Clone() IObject {
-	r := new(Message)
-	r.proto = msg
-	return r
+	return &Message{Object: &Object{proto: msg}}
 }
 
 func (msg *Message) GetName() string {
