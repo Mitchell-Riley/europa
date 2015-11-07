@@ -32,7 +32,7 @@ type INumber interface {
 
 func NewNumber(num float64) INumber {
 	return &Number{
-		Object: &Object{slots: make(map[string]IObject, DEFAULT_SLOTS_SIZE)},
+		Object: &Object{slots: make(map[string]IObject, DefaultSlotsSize)},
 		value:  num,
 	}
 }

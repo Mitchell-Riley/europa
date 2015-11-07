@@ -31,7 +31,7 @@ type IString interface {
 
 func NewString(str string) IString {
 	return &String{
-		Object: &Object{slots: make(map[string]IObject, DEFAULT_SLOTS_SIZE)},
+		Object: &Object{slots: make(map[string]IObject, DefaultSlotsSize)},
 		value:  str,
 	}
 }

@@ -23,7 +23,7 @@ import (
 	"os"
 )
 
-const EUROPA_VERSION = "0.1.0"
+const EuropaVersion = "0.1.0"
 
 func displayUsage() {
 	fmt.Fprintf(os.Stderr, "Usage: %s\n", os.Args[0])
@@ -49,7 +49,7 @@ func main() {
 	}
 
 	if versionflag {
-		fmt.Println(string(EUROPA_VERSION))
+		fmt.Println(EuropaVersion)
 		return
 	}
 

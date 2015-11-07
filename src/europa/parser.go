@@ -162,7 +162,7 @@ func (lex *Lexer) Lex() {
 	} else if lex.CurrentChar() == '\n' {
 		lex.next = ";"
 		lex.NextChar()
-		lex.line += 1
+		lex.line++
 	} else if lex.CurrentChar() == ' ' {
 		lex.NextChar()
 		lex.Lex()

@@ -16,7 +16,7 @@
 
 package europa
 
-const DEFAULT_SLOTS_SIZE = 8
+const DefaultSlotsSize = 8
 
 type Object struct {
 	/* VM State */
@@ -55,7 +55,7 @@ type IObject interface {
 func NewObject(state IState, proto IObject, locals bool, activatable bool, scanned bool) IObject {
 	return &Object{
 		state:       &state,
-		slots:       make(map[string]IObject, DEFAULT_SLOTS_SIZE),
+		slots:       make(map[string]IObject, DefaultSlotsSize),
 		proto:       proto,
 		locals:      locals,
 		activatable: activatable,
@@ -66,7 +66,7 @@ func NewObject(state IState, proto IObject, locals bool, activatable bool, scann
 func (obj *Object) Clone() IObject {
 	return &Object{
 		proto:  obj.proto,
-		slots:  make(map[string]IObject, DEFAULT_SLOTS_SIZE),
+		slots:  make(map[string]IObject, DefaultSlotsSize),
 		locals: false,
 	}
 }
@@ -139,9 +139,8 @@ func (obj *Object) Forward(locals IObject, msg IMessage) IObject {
 				return delegate.Perform(locals, msg)
 			}
 			return nil
-		} else {
-			return v.Activate(obj, locals, msg, ctx)
 		}
+		return v.Activate(obj, locals, msg, ctx)
 	}
 	return nil
 }
